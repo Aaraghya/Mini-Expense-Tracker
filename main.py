@@ -66,3 +66,26 @@ else:
 
 with st.expander("📜 View all expenses"):
     st.dataframe(df[::-1], use_container_width=True)
+
+with st.expander("📅 Filter by date"):
+    date_range = st.date_input("Select date range", [])
+    if len(date_range) == 2:
+        start_date, end_date = date_range
+        df_filtered = df[
+            (pd.to_datetime(df["Date"]) >= pd.to_datetime(start_date)) &
+            (pd.to_datetime(df["Date"]) <= pd.to_datetime(end_date))
+        ]
+    else:
+        df_filtered = df
+
+csv_export = df.to_csv(index=False).encode('utf-8')
+st.download_button("📁 Download CSV", csv_export, file_name='expenses.csv', mime='text/csv')
+
+df["Month"] = pd.to_datetime(df["Date"]).dt.to_period("M").astype(str)
+monthly_summary = df.groupby(["Month", "Category"])["Amount"].sum().reset_index()
+top_spends = monthly_summary.loc[monthly_summary.groupby("Month")["Amount"].idxmax()]
+
+with st.expander("📊 Top Spending Category Each Month"):
+    st.dataframe(top_spends, use_container_width=True)
+
+
