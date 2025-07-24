@@ -4,7 +4,6 @@ import os
 from datetime import datetime
 import matplotlib.pyplot as plt
 
-
 st.set_page_config(page_title="Mini Expense Tracker 💸", layout="centered")
 
 with open("style.css") as f:
@@ -45,23 +44,25 @@ with st.form("expense_form"):
 total = df["Amount"].sum()
 st.markdown(f"<div class='total'>Total Spent: ₹{total:.2f}</div>", unsafe_allow_html=True)
 
-if not df.empty:
+if not df.empty and df["Amount"].sum() > 0:
+    pie_data = df.groupby("Category")["Amount"].sum()
+
+    def actual_rupees(pct, allvals):
+        total = sum(allvals)
+        val = int(round(pct * total / 100.0))
+        return f"₹{val}"
+
     fig, ax = plt.subplots()
-pie_data = df.groupby("Category")["Amount"].sum()
-def actual_rupees(pct, allvals):
-    total = sum(allvals)
-    val = int(round(pct * total / 100.0))
-    return f"₹{val}"
-
-ax.pie(
-    pie_data,
-    labels=pie_data.index,
-    autopct=lambda pct: actual_rupees(pct, pie_data),
-    startangle=90
-)
-ax.axis("equal")
-st.pyplot(fig)
-
+    ax.pie(
+        pie_data,
+        labels=pie_data.index,
+        autopct=lambda pct: actual_rupees(pct, pie_data),
+        startangle=90
+    )
+    ax.axis("equal")
+    st.pyplot(fig)
+else:
+    st.info("No expenses to chart yet. Add your first one!")
 
 with st.expander("📜 View all expenses"):
     st.dataframe(df[::-1], use_container_width=True)
