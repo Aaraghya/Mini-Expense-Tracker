@@ -47,10 +47,21 @@ st.markdown(f"<div class='total'>Total Spent: ₹{total:.2f}</div>", unsafe_allo
 
 if not df.empty:
     fig, ax = plt.subplots()
-    pie_data = df.groupby("Category")["Amount"].sum()
-    ax.pie(pie_data, labels=pie_data.index, autopct="₹%.0f", startangle=90)
-    ax.axis("equal")
-    st.pyplot(fig)
+pie_data = df.groupby("Category")["Amount"].sum()
+def actual_rupees(pct, allvals):
+    total = sum(allvals)
+    val = int(round(pct * total / 100.0))
+    return f"₹{val}"
+
+ax.pie(
+    pie_data,
+    labels=pie_data.index,
+    autopct=lambda pct: actual_rupees(pct, pie_data),
+    startangle=90
+)
+ax.axis("equal")
+st.pyplot(fig)
+
 
 with st.expander("📜 View all expenses"):
     st.dataframe(df[::-1], use_container_width=True)
