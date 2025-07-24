@@ -1,0 +1,47 @@
+
+body {
+    background-color: #FFF0DB !important;
+    color: #654321 !important;
+}
+
+h1 {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    color: #654321;
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+div.total {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #B25068;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.stButton>button {
+    background-color: #F8B195;
+    color: white;
+    border-radius: 12px;
+    padding: 10px 20px;
+    border: none;
+    font-weight: bold;
+}
+
+.stButton>button:hover {
+    background-color: #F67280;
+    transition: 0.3s ease-in-out;
+}
+
+.stTextInput>div>input {
+    background-color: #fffaf3;
+    border: 1px solid #f5c1c1;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.stSelectbox>div>div {
+    background-color: #fffaf3;
+    border-radius: 8px;
+}
